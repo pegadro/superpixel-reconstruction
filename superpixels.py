@@ -11,7 +11,7 @@ class Superpixel:
         self.size_category = size_category
 
 
-def get_superpixels(images, n_segments_list, target):
+def get_superpixels(images, n_segments_list):
     superpixels = []
 
     for image in images:

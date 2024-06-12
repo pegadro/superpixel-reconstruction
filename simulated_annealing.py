@@ -2,6 +2,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import cv2
 from metrics import calculate_mse, calculate_ssim
+from image_utils import get_mean_image_color
 
 
 class SimulatedAnnealing:
@@ -127,6 +128,10 @@ class SimulatedAnnealing:
         new_image[filter_mask_image[:, 0], filter_mask_image[:, 1]] = blended_superpixel
 
         return new_image
+
+    def get_initial_state(self):
+        mean_color = get_mean_image_color(self.target)
+        return np.full(self.target.shape, mean_color)
 
     def calculate_iterations_per_size(self, superpixels_sizes, max_iterations):
         weights = list(range(1, len(superpixels_sizes) + 1))

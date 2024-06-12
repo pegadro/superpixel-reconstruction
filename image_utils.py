@@ -30,7 +30,7 @@ def load_and_scale_images(target_image_path, selected_images_paths, resize_facto
         )
 
         image = np.array(image)
-        selected_images.append(selected_images)
+        selected_images.append(image)
 
     return target, selected_images
 
