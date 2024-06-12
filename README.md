@@ -21,4 +21,5 @@ The project involves reconstructing images from the superpixels of a set of imag
 
 To know about how it works, the methodology followed, the methods proposed and implemented, read the report.
 
-<embed src="report_en.pdf" type="application/pdf" width="100%" height="600px" />
+[Report](report_en.pdf)
+
