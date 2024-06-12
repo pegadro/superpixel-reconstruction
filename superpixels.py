@@ -11,27 +11,10 @@ class Superpixel:
         self.size_category = size_category
 
 
-def get_superpixels(images_paths, n_segments_list, target):
+def get_superpixels(images, n_segments_list, target):
     superpixels = []
 
-    for path in images_paths:
-        image = Image.open(path)
-        width = target.shape[1]
-        factor = (
-            image.size[0] // width if image.size[0] >= width else width // image.size[0]
-        )
-        image = image.resize(
-            (
-                width,
-                (
-                    image.size[1] // factor
-                    if image.size[0] >= width
-                    else image.size[1] * factor
-                ),
-            )
-        )
-        image = np.array(image)
-
+    for image in images:
         for n_segments in n_segments_list:
             segments = slic(
                 image, n_segments=n_segments, compactness=50, sigma=1, start_label=1
