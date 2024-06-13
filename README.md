@@ -1,9 +1,9 @@
 # Superpixel Reconstruction
 Reconstruct images from the superpixels of a set of images that do not contain the image to be reconstructed.
 <div style="display: flex; flex-direction: row; align-items: center;">
-  <img src="images_test/monalisa/Cesareborgia.jpeg" alt="Cesare Borgia" width="200px" style="margin-right: 10px"/>
+  <img src="images_test/monalisa/Cesareborgia.jpeg" alt="Cesare Borgia" width="300px" style="margin-right: 10px"/>
 
-  <img src="images_test/monalisa/ermine.jpeg" alt="Ermine" width="200px" />
+  <img src="images_test/monalisa/ermine.jpeg" alt="Ermine" width="300px" />
 </div>
 Images from which superpixels were obtained
 <br><br>
