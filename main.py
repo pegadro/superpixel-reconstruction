@@ -7,22 +7,26 @@ from skimage import io
 
 def run():
     target_image_path = "images_test/beatles.jpg"
-    selected_images_path = ["images_test/desperate_man.jpeg", "images_test/pearl.jpeg"]
+    selected_images_path = [
+        "images_test/desperate_man.jpeg",
+        "images_test/pearl.jpeg",
+        "images_test/socrates.jpeg",
+    ]
     output_reconstruction_path = "reconstruction/beatles_reconstruction.png"
 
     target, selected_images = load_and_scale_images(
-        target_image_path, selected_images_path, resize_factor=10
+        target_image_path, selected_images_path, resize_factor=12
     )
 
-    segments_list = [500, 2500, 5000, 10000]
+    segments_list = [250, 500, 5000, 10000]
     print("obtenido superpixels")
     superpixels = get_superpixels(selected_images, segments_list)
     simulated_annealing = SimulatedAnnealing(
         target,
         superpixels,
         segments_list,
-        max_iterations=15000,
-        initial_temperature=15000,
+        max_iterations=20000,
+        initial_temperature=20000,
         objective_function=calculate_mse,
     )
     print("corriendo recocido simulado")
