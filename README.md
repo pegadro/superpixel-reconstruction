@@ -8,11 +8,9 @@ Reconstruct images from the superpixels of a set of images that do not contain t
 Images from which superpixels were obtained
 <br><br>
 <img src="images_test/monalisa/monalisa.jpeg" alt="Monalisa" width="300px" />
-<br>
 Target image
 <br><br>
 <img src="reconstruction/monalisa_reconstruction.png" alt="Monalisa" width="300px" />
-<br>
 Reconstruction
 
 ## Summary
