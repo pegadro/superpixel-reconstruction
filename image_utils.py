@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-
+from PyQt5.QtGui import QImage, QPixmap
 
 def load_and_scale_images(target_image_path, selected_images_paths, resize_factor=2):
     target = Image.open(target_image_path)
@@ -33,6 +33,26 @@ def load_and_scale_images(target_image_path, selected_images_paths, resize_facto
         selected_images.append(image)
 
     return target, selected_images
+
+
+def numpy_array_to_qpixmap(image):
+    height, width, channel = image.shape
+    bytes_per_line = 3 * width
+    
+    if image.dtype != np.uint8:
+        image = (image * 255).astype(np.uint8)
+    
+    # OpenCV usa BGR, Qt usa RGB, así que necesitamos cambiar el orden de los canales
+    # if channel == 3:
+    #     image = image[:, :, ::-1]
+    
+    # Crear QImage desde el numpy array
+    q_image = QImage(image.data, width, height, bytes_per_line, QImage.Format_RGB888)
+    
+    # Convertir QImage a QPixmap
+    pixmap = QPixmap.fromImage(q_image)
+    
+    return pixmap
 
 
 def get_mean_image_color(image):

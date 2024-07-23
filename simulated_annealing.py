@@ -26,8 +26,9 @@ class SimulatedAnnealing:
         )
 
         self.initial_temperature = initial_temperature
-        self.cooling_factor = 0.999
+        self.cooling_factor = 0.9999
         self.objective_function = objective_function
+        self.initial = self.get_initial_state()
 
     def generate_random_successor(self, current, iteration):
         position = [
@@ -50,8 +51,8 @@ class SimulatedAnnealing:
     def temperature_change(self, current_temperature):
         return current_temperature * self.cooling_factor
 
-    def simulated_annealing(self, initial):
-        current = initial
+    def simulated_annealing(self):
+        current = self.initial
         current_value = self.objective_function(self.target, current)
         current_temperature = self.initial_temperature
 
@@ -75,34 +76,8 @@ class SimulatedAnnealing:
                     current_value = successor_value
                     n_superpixels += 1
 
-            reconstruction_comparison = np.hstack((current, self.target))
-            info_image = Image.new(
-                "RGB", (reconstruction_comparison.shape[1], 25), color="white"
-            )
-            d = ImageDraw.Draw(info_image)
-            font = ImageFont.truetype("Arial.ttf", 8)
-            d.text(
-                (10, 10),
-                f"Iterations {iterations} | Superpixels {n_superpixels} | Current value {current_value} | Current temperature {current_temperature}",
-                font=font,
-                fill=(0, 0, 0),
-            )
-
-            reconstruction_comparison = np.vstack(
-                (np.array(info_image), reconstruction_comparison)
-            )
-
-            cv2.imshow(
-                "Reconstruction",
-                cv2.cvtColor(reconstruction_comparison, cv2.COLOR_RGB2BGR),
-            )
-
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                break
-
             iterations += 1
-
-        cv2.destroyAllWindows()
+            yield iterations, current, current_value, current_temperature, n_superpixels
 
         return current
 

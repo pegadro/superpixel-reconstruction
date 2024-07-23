@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from skimage.segmentation import slic
+from skimage.segmentation import slic, mark_boundaries
 
 
 class Superpixel:
@@ -10,37 +10,109 @@ class Superpixel:
         self.mean_color = mean_color
         self.size_category = size_category
 
-
-def get_superpixels(images, n_segments_list):
+def get_superpixels(image, n_segments):
     superpixels = []
+    boundaries_image = None
 
-    for image in images:
-        for n_segments in n_segments_list:
-            segments = slic(
-                image, n_segments=n_segments, compactness=50, sigma=1, start_label=1
+    segments = slic(
+        image, n_segments=n_segments, compactness=50, sigma=1, start_label=1
+    )
+
+    boundaries_image = mark_boundaries(image, segments)
+    unique_segments = np.unique(segments)
+
+    for i, segment_label in enumerate(unique_segments):
+        mask = segments == segment_label
+        coords = np.argwhere(mask)
+
+        y0, x0 = coords.min(axis=0)
+        y1, x1 = coords.max(axis=0) + 1
+
+        superpixel = image[y0:y1, x0:x1]
+        superpixel_mask = mask[y0:y1, x0:x1]
+
+        pixels = superpixel[superpixel_mask]
+        mean_color = np.mean(pixels, axis=0).astype(np.int_)
+
+        superpixels.append(
+            Superpixel(
+                superpixel,
+                superpixel_mask,
+                mean_color=mean_color,
+                size_category=n_segments,
             )
-            unique_segments = np.unique(segments)
+        )
 
-            for i, segment_label in enumerate(unique_segments):
-                mask = segments == segment_label
-                coords = np.argwhere(mask)
+    return superpixels, boundaries_image
 
-                y0, x0 = coords.min(axis=0)
-                y1, x1 = coords.max(axis=0) + 1
+# def get_superpixels(image, n_segments_list):
+#     superpixels = []
+#     boundaries_image = None
 
-                superpixel = image[y0:y1, x0:x1]
-                superpixel_mask = mask[y0:y1, x0:x1]
+#     for n_segments in n_segments_list:
+#         print(n_segments)
+#         segments = slic(
+#             image, n_segments=n_segments, compactness=50, sigma=1, start_label=1
+#         )
 
-                pixels = superpixel[superpixel_mask]
-                mean_color = np.mean(pixels, axis=0).astype(np.int_)
+#         boundaries_image = mark_boundaries(image, segments)
+#         unique_segments = np.unique(segments)
 
-                superpixels.append(
-                    Superpixel(
-                        superpixel,
-                        superpixel_mask,
-                        mean_color=mean_color,
-                        size_category=n_segments,
-                    )
-                )
+#         for i, segment_label in enumerate(unique_segments):
+#             mask = segments == segment_label
+#             coords = np.argwhere(mask)
 
-    return superpixels
+#             y0, x0 = coords.min(axis=0)
+#             y1, x1 = coords.max(axis=0) + 1
+
+#             superpixel = image[y0:y1, x0:x1]
+#             superpixel_mask = mask[y0:y1, x0:x1]
+
+#             pixels = superpixel[superpixel_mask]
+#             mean_color = np.mean(pixels, axis=0).astype(np.int_)
+
+#             superpixels.append(
+#                 Superpixel(
+#                     superpixel,
+#                     superpixel_mask,
+#                     mean_color=mean_color,
+#                     size_category=n_segments,
+#                 )
+#             )
+
+#     return superpixels, boundaries_image
+
+
+# def get_superpixels(images, n_segments_list):
+#     superpixels = []
+
+#     for image in images:
+#         for n_segments in n_segments_list:
+#             segments = slic(
+#                 image, n_segments=n_segments, compactness=50, sigma=1, start_label=1
+#             )
+#             unique_segments = np.unique(segments)
+
+#             for i, segment_label in enumerate(unique_segments):
+#                 mask = segments == segment_label
+#                 coords = np.argwhere(mask)
+
+#                 y0, x0 = coords.min(axis=0)
+#                 y1, x1 = coords.max(axis=0) + 1
+
+#                 superpixel = image[y0:y1, x0:x1]
+#                 superpixel_mask = mask[y0:y1, x0:x1]
+
+#                 pixels = superpixel[superpixel_mask]
+#                 mean_color = np.mean(pixels, axis=0).astype(np.int_)
+
+#                 superpixels.append(
+#                     Superpixel(
+#                         superpixel,
+#                         superpixel_mask,
+#                         mean_color=mean_color,
+#                         size_category=n_segments,
+#                     )
+#                 )
+
+#     return superpixels

@@ -1,40 +1,9 @@
-from image_utils import load_and_scale_images
-from superpixels import get_superpixels
-from simulated_annealing import SimulatedAnnealing
-from metrics import calculate_mse, calculate_ssim
-from skimage import io
-
-
-def run():
-    target_image_path = "images_test/beatles.jpg"
-    selected_images_path = [
-        "images_test/desperate_man.jpeg",
-        "images_test/pearl.jpeg",
-        "images_test/socrates.jpeg",
-    ]
-    output_reconstruction_path = "reconstruction/beatles_reconstruction.png"
-
-    target, selected_images = load_and_scale_images(
-        target_image_path, selected_images_path, resize_factor=12
-    )
-
-    segments_list = [250, 500, 5000, 10000]
-    print("obtenido superpixels")
-    superpixels = get_superpixels(selected_images, segments_list)
-    simulated_annealing = SimulatedAnnealing(
-        target,
-        superpixels,
-        segments_list,
-        max_iterations=20000,
-        initial_temperature=20000,
-        objective_function=calculate_mse,
-    )
-    print("corriendo recocido simulado")
-    initial = simulated_annealing.get_initial_state()
-    best_solution = simulated_annealing.simulated_annealing(initial)
-
-    io.imsave(output_reconstruction_path, best_solution)
-
+import sys
+from PyQt5.QtWidgets import QApplication
+from ui.main_window import MainWindow
 
 if __name__ == "__main__":
-    run()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
