@@ -98,7 +98,7 @@ class SimulatedAnnealing:
 
         blended_superpixel = (1 - alpha) * new_image[
             filter_mask_image[:, 0], filter_mask_image[:, 1]
-        ] + (alpha) * (superpixel.superpixel[filter_mask[:, 0], filter_mask[:, 1]])
+        ] + (alpha) * superpixel.mean_color # (superpixel.superpixel[filter_mask[:, 0], filter_mask[:, 1]])
 
         new_image[filter_mask_image[:, 0], filter_mask_image[:, 1]] = blended_superpixel
 

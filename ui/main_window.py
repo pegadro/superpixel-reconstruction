@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
 
     def change_target_image(self):
         file_name, _ = QFileDialog.getOpenFileName(
-            self, "Select Target Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp)"
+            self, "Select Target Image", "", "Image Files (*.png *.jpg *.jpeg *.bmp *.webp)"
         )
 
         if file_name:
@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
             self,
             "Select Images for Reconstruction",
             "",
-            "Image Files (*.png *.jpg *.jpeg *.bmp)",
+            "Image Files (*.png *.jpg *.jpeg *.bmp *.webp)",
         )
 
         self.reconstruction_image_paths.extend(file_names)
